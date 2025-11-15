@@ -1,28 +1,25 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 class LoginPage:
-    # Locators
     USERNAME = (By.ID, "username")
     PASSWORD = (By.ID, "password")
-    LOGIN_BUTTON = (By.CSS_SELECTOR, "button.radius")
+    LOGIN_BTN = (By.CSS_SELECTOR, "button.radius")
     SUCCESS_MESSAGE = (By.CSS_SELECTOR, "div.flash.success")
 
     def __init__(self, driver):
         self.driver = driver
 
-    def enter_username(self, username):
-        self.driver.find_element(*self.USERNAME).send_keys(username)
-
-    def enter_password(self, password):
-        self.driver.find_element(*self.PASSWORD).send_keys(password)
-
-    def click_login(self):
-        self.driver.find_element(*self.LOGIN_BUTTON).click()
-
-    def login(self, username, password):
-        self.enter_username(username)
-        self.enter_password(password)
-        self.click_login()
+    def login(self, user, pwd):
+        self.driver.find_element(*self.USERNAME).send_keys(user)
+        self.driver.find_element(*self.PASSWORD).send_keys(pwd)
+        self.driver.find_element(*self.LOGIN_BTN).click()
 
     def is_success_message_displayed(self):
-        return "You logged into a secure area!" in self.driver.page_source
+        try:
+            return WebDriverWait(self.driver, 5).until(
+                EC.visibility_of_element_located(self.SUCCESS_MESSAGE)
+            ).is_displayed()
+        except:
+            return False

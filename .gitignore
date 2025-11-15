@@ -4,3 +4,6 @@ __pycache__/
 .pytest_cache/
 reports/
 screenshots/
+*.png
+config/*.yaml
+__pycache__/
